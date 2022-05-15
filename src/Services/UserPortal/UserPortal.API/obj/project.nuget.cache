@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cIVvhvv376ydbpkZubIWsIFDurrma5m+P96ryf0QmIu5wRdgrAloZS8ZXYdJe6nJ2jFOXAcL8fZaztqHfNx/3Q==",
+  "dgSpecHash": "gpy6Tv5CUqntQti+vnfg9txwZCojEw1vcs6Stn3LiDaqVQMhs2i8lUnop+Pcte/36fhMRTSgf+0lGofp61HfKA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\Services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj",
+  "projectFilePath": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kaoz\\.nuget\\packages\\dnsclient\\1.6.0\\dnsclient.1.6.0.nupkg.sha512",
     "C:\\Users\\Kaoz\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.5\\microsoft.aspnetcore.authentication.jwtbearer.6.0.5.nupkg.sha512",

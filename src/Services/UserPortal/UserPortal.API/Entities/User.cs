@@ -1,17 +1,16 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using UserManagement.Services.UserPortal.API.Models;
 
 namespace UserManagement.Services.UserPortal.API.Entities
 {
-    public class User : IUser
+    public class User : IEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
         [BsonElement("Name")]
-        public string UserName { get; set; } = null!;
+        public string Name { get; set; } = null!;
 
         [BsonElement("PasswordHash")]
         public string PasswordHash { get; set; } = null!;

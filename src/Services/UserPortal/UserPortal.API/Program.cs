@@ -3,8 +3,12 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using Swashbuckle.AspNetCore.Filters;
+using UserManagement.Services.UserPortal.API.Entities;
+using UserManagement.Services.UserPortal.API.Extensions;
 using UserManagement.Services.UserPortal.API.Models;
+using UserManagement.Services.UserPortal.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddMongo().AddMongoRepository<User>("Users");
 
 var app = builder.Build();
 

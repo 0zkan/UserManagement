@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\Services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj": {}
+    "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\Services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj": {
+    "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\Services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj",
+        "projectUniqueName": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj",
         "projectName": "UserPortal.API",
-        "projectPath": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\Services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj",
+        "projectPath": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\services\\UserPortal\\UserPortal.API\\UserPortal.API.csproj",
         "packagesPath": "C:\\Users\\Kaoz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\Services\\UserPortal\\UserPortal.API\\obj\\",
+        "outputPath": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\services\\UserPortal\\UserPortal.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Kaoz\\AppData\\Roaming\\NuGet\\NuGet.Config"

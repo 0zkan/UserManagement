@@ -1,8 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using UserManagement.Services.UserPortal.API.Entities;
@@ -16,12 +14,13 @@ namespace UserManagement.Services.UserPortal.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly UserRepository _userRepository = new();
+        private readonly IRepository<User> _userRepository;
         public IUserService _userService { get; }
 
-        public AuthController(IConfiguration configuration, IUserService userService)
+        public AuthController(IConfiguration configuration, IRepository<User> userRepository, IUserService userService)
         {
             _configuration = configuration;
+            _userRepository = userRepository;
             _userService = userService;
         }
 
@@ -33,7 +32,7 @@ namespace UserManagement.Services.UserPortal.API.Controllers
                 CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
                 User user = new User();
-                user.UserName = request.UserName;
+                user.Name = request.UserName;
                 user.PasswordHash = Convert.ToBase64String(passwordHash, 0, passwordHash.Length);
                 user.PasswordSalt = Convert.ToBase64String(passwordSalt, 0, passwordSalt.Length);
                 await _userRepository.CreateAsync(user);
@@ -68,7 +67,7 @@ namespace UserManagement.Services.UserPortal.API.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Role, "User")
             };
             //TODO : key secret store a konulacak
