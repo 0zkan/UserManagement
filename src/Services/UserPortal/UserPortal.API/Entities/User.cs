@@ -1,13 +1,14 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using UserManagement.Framework.Entities;
 
 namespace UserManagement.Services.UserPortal.API.Entities
 {
     public class User : IEntity
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public Guid Id { get; set; }
 
         [BsonElement("Name")]
         public string Name { get; set; } = null!;

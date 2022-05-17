@@ -1,11 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using UserManagement.Framework.Repositories;
+using UserManagement.Services.UserPortal.API.Contracts;
 using UserManagement.Services.UserPortal.API.Entities;
 using UserManagement.Services.UserPortal.API.Models;
-using UserManagement.Services.UserPortal.API.Repositories;
 
 namespace UserManagement.Services.UserPortal.API.Controllers
 {
@@ -15,13 +17,15 @@ namespace UserManagement.Services.UserPortal.API.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IRepository<User> _userRepository;
+        private readonly IPublishEndpoint _publishEndpoint;
         public IUserService _userService { get; }
 
-        public AuthController(IConfiguration configuration, IRepository<User> userRepository, IUserService userService)
+        public AuthController(IConfiguration configuration, IRepository<User> userRepository, IUserService userService, IPublishEndpoint publishEndpoint)
         {
             _configuration = configuration;
             _userRepository = userRepository;
             _userService = userService;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpPost("register")]
@@ -32,10 +36,13 @@ namespace UserManagement.Services.UserPortal.API.Controllers
                 CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
                 User user = new User();
+                user.Id = Guid.NewGuid();
                 user.Name = request.UserName;
                 user.PasswordHash = Convert.ToBase64String(passwordHash, 0, passwordHash.Length);
                 user.PasswordSalt = Convert.ToBase64String(passwordSalt, 0, passwordSalt.Length);
                 await _userRepository.CreateAsync(user);
+
+                await _publishEndpoint.Publish(new UserCreated(user.Id, user.Name));
 
                 return Ok("User Created");
             }

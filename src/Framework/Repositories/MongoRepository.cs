@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using UserManagement.Services.UserPortal.API.Entities;
+using UserManagement.Framework.Entities;
 
-namespace UserManagement.Services.UserPortal.API.Repositories
+namespace UserManagement.Framework.Repositories
 {
     public class MongoRepository<T> : IRepository<T> where T : IEntity
     {
@@ -22,10 +22,10 @@ namespace UserManagement.Services.UserPortal.API.Repositories
         public async Task CreateAsync(T newEntity) =>
             await dbCollection.InsertOneAsync(newEntity);
 
-        public async Task UpdateAsync(string id, T updatedEntity) =>
+        public async Task UpdateAsync(Guid id, T updatedEntity) =>
             await dbCollection.ReplaceOneAsync(x => x.Id == id, updatedEntity);
 
-        public async Task RemoveAsync(string id) =>
+        public async Task RemoveAsync(Guid id) =>
             await dbCollection.DeleteOneAsync(x => x.Id == id);
     }
 

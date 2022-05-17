@@ -1,20 +1,19 @@
+using System.Reflection;
+using MassTransit;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
-using UserManagement.Services.UserPortal.API.Entities;
-using UserManagement.Services.UserPortal.API.Models;
-using UserManagement.Services.UserPortal.API.Repositories;
-using UserManagement.Services.UserPortal.API.Settings;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using UserManagement.Framework.Repositories;
+using UserManagement.Framework.Entities;
+using UserManagement.Framework.Settings;
 
-namespace UserManagement.Services.UserPortal.API.Extensions
+namespace UserManagement.Framework.Extensions
 {
     public static class Extensions
     {
-        public static UserDto AsDto(this User user)
-        {
-            return new UserDto(user.Name, user.PasswordHash);
-        }
         public static IServiceCollection AddMongo(this IServiceCollection services)
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
@@ -41,6 +40,25 @@ namespace UserManagement.Services.UserPortal.API.Extensions
                     return new MongoRepository<T>(database, collectionName);
                 }
             );
+
+            return services;
+        }
+
+        public static IServiceCollection AddMassTransitWithRabbitMQ(this IServiceCollection services)
+        {
+            services.AddMassTransit(configure =>
+            {
+                configure.AddConsumers(Assembly.GetEntryAssembly());
+
+                configure.UsingRabbitMq((context, configurator) =>
+                {
+                    var configuration = context.GetService<IConfiguration>();
+                    var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
+                    var rabbitMQSettings = configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
+                    configurator.Host(rabbitMQSettings.Host);
+                    configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));
+                });
+            });
 
             return services;
         }

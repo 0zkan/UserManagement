@@ -3,17 +3,16 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MongoDB.Driver;
 using Swashbuckle.AspNetCore.Filters;
+using UserManagement.Framework.Extensions;
 using UserManagement.Services.UserPortal.API.Entities;
-using UserManagement.Services.UserPortal.API.Extensions;
 using UserManagement.Services.UserPortal.API.Models;
-using UserManagement.Services.UserPortal.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<UserPortalDatabaseSettings>(
-    builder.Configuration.GetSection("UserPortalDatabase"));
+    builder.Configuration.GetSection("UserPortalDatabase")
+);
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -31,8 +30,8 @@ builder.Services.AddSwaggerGen(
         });
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     }
-
 );
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -47,7 +46,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddMongo().AddMongoRepository<User>("Users");
+builder.Services.AddMongo()
+                .AddMongoRepository<User>("Users")
+                .AddMassTransitWithRabbitMQ();
 
 var app = builder.Build();
 

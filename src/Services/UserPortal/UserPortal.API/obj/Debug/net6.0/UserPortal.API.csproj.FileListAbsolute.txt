@@ -55,3 +55,12 @@ C:\Users\Kaoz\Documents\UserManagement\src\Services\UserPortal\UserPortal.API\bi
 C:\Users\Kaoz\Documents\UserManagement\src\Services\UserPortal\UserPortal.API\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\Kaoz\Documents\UserManagement\src\Services\UserPortal\UserPortal.API\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\Kaoz\Documents\UserManagement\src\Services\UserPortal\UserPortal.API\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Kaoz\Documents\UserManagement\src\services\UserPortal\UserPortal.API\bin\Debug\net6.0\MassTransit.dll
+C:\Users\Kaoz\Documents\UserManagement\src\services\UserPortal\UserPortal.API\bin\Debug\net6.0\MassTransit.Abstractions.dll
+C:\Users\Kaoz\Documents\UserManagement\src\services\UserPortal\UserPortal.API\bin\Debug\net6.0\MassTransit.AspNetCoreIntegration.dll
+C:\Users\Kaoz\Documents\UserManagement\src\services\UserPortal\UserPortal.API\bin\Debug\net6.0\MassTransit.ExtensionsDependencyInjectionIntegration.dll
+C:\Users\Kaoz\Documents\UserManagement\src\services\UserPortal\UserPortal.API\bin\Debug\net6.0\MassTransit.RabbitMqTransport.dll
+C:\Users\Kaoz\Documents\UserManagement\src\services\UserPortal\UserPortal.API\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Kaoz\Documents\UserManagement\src\services\UserPortal\UserPortal.API\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\Kaoz\Documents\UserManagement\src\services\UserPortal\UserPortal.API\bin\Debug\net6.0\System.Text.Json.dll
+C:\Users\Kaoz\Documents\UserManagement\src\Services\UserPortal\UserPortal.API\bin\Debug\net6.0\Framework.dll

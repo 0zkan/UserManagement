@@ -14,12 +14,15 @@
         "outputPath": "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\Services\\Management\\Management.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
+          "C:\\Users\\Kaoz\\Documents\\UserManagement\\src\\NuGet.Config",
           "C:\\Users\\Kaoz\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Users\\Kaoz\\Documents\\UserManagement\\src": {},
+          "https://api.nuget.org/v3/index.json": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,6 +41,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Framework": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
             "Grpc.AspNetCore": {
               "target": "Package",
               "version": "[2.40.0, )"

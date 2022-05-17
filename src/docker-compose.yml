@@ -1,0 +1,35 @@
+#docker run -d --rm --name mongo -p 27017:27017 -v mongodb:/data/db mongo
+#external_port:internal_port
+version: '3.8'
+
+services:
+  userPortalMongo:
+    image: mongo
+    container_name: userPortalMongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodbdata:/data/db
+  
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq
+
+  managementMongo:
+    image: mongo
+    container_name: managementMongo
+    ports:
+      - 27018:27018
+    volumes:
+      - mongodbdata2:/data/db
+
+volumes:
+  mongodbdata:
+  mongodbdata2:
+  rabbitmqdata:

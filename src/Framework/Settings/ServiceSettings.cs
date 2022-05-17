@@ -1,4 +1,4 @@
-namespace UserManagement.Services.UserPortal.API.Settings
+namespace UserManagement.Framework.Settings
 {
     public class ServiceSettings
     {
