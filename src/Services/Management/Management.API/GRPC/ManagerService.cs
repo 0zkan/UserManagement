@@ -23,10 +23,12 @@ public class ManagerService : Manager.ManagerBase
     public override async Task<UserListResponse> GetUserList(UserListRequest request, ServerCallContext context)
     {
         UserListResponse result = new UserListResponse();
-        result.Data.Add(new UserModel { Id = 1, Name = "Ozkan", Isenabled = false, Isapprovement = false });
-        result.Data.Add(new UserModel { Id = 2, Name = "Hakan", Isenabled = false, Isapprovement = false });
 
-        await _publishEndpoint.Publish(new UserApprovement(Guid.NewGuid(), true));
+        var userList = await _userRepository.GetAsync();
+        foreach (var item in userList)
+        {
+            result.Data.Add(new UserModel { Id = item.Id.ToString(), Name = item.Name, Isenabled = item.IsEnable, Isapprovement = item.IsApproved });
+        }
 
         return result;
     }
@@ -34,6 +36,18 @@ public class ManagerService : Manager.ManagerBase
     public override async Task<UserApproveResponse> UserApprovement(UserApproveRequest request, ServerCallContext context)
     {
         UserApproveResponse result = new UserApproveResponse();
+        //Todo : check user id is null or empty
+        var user = await _userRepository.GetAsync(new Guid(request.Id));
+        if (user != null && request.Isapproved)
+        {
+            user.IsApproved = true;
+            user.IsEnable = true;
+            await _userRepository.UpdateAsync(user.Id, user);
+            await _publishEndpoint.Publish(new UserApprovement(user.Id, true));
+        }
+
+        result.Issuccess = true;
+        result.Message = "User confirmed.";
 
         return result;
     }
@@ -42,14 +56,17 @@ public class ManagerService : Manager.ManagerBase
     {
         UserActivationResponse result = new UserActivationResponse();
 
-        return result;
-    }
-    public override async Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
-    {
-        HelloReply result = new HelloReply();
-        result.Message = "Helloo";
+        //Todo : check user id is null or empty
+        var user = await _userRepository.GetAsync(new Guid(request.Id));
+        if (user != null)
+        {
+            user.IsEnable = request.Isneabled;
+            await _userRepository.UpdateAsync(user.Id, user);
+            await _publishEndpoint.Publish(new UserActivation(user.Id, request.Isneabled));
+        }
 
-        await _publishEndpoint.Publish(new UserApprovement(Guid.NewGuid(), true));
+        result.Issuccess = true;
+        result.Message = request.Isneabled ? "User enabled." : "User disabled";
 
         return result;
     }

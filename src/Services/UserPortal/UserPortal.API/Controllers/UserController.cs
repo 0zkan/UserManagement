@@ -11,6 +11,9 @@ public class UserController : ControllerBase
     [HttpPut("{id}/profile"), Authorize(Roles = "User")]
     public async Task<ActionResult<string>> Profile(UserProfileDto request)
     {
+        //Kullanıcının enable olması gerekiyor, bunu her durumda yapmak lazım.
+        //custom attribute ile kontrol edilebilir
+
         return Ok("Updated");
     }
 }

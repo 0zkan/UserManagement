@@ -35,11 +35,22 @@ public class AuthController : ControllerBase
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
+            var existedUser = await _userRepository.GetAsync(request.UserName.ToLower());
+
+            if (existedUser != null)
+            {
+                return BadRequest("User exist.");
+            }
+
             User user = new User();
             user.Id = Guid.NewGuid();
-            user.Name = request.UserName;
+            user.Name = request.UserName.ToLower();
             user.PasswordHash = Convert.ToBase64String(passwordHash, 0, passwordHash.Length);
             user.PasswordSalt = Convert.ToBase64String(passwordSalt, 0, passwordSalt.Length);
+            user.IsApproved = false;
+            user.IsEnable = false;
+            user.Description = string.Empty;
+
             await _userRepository.CreateAsync(user);
 
             await _publishEndpoint.Publish(new UserRegister(user.Id, user.Name));
@@ -55,7 +66,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<string>> Login(UserDto request)
     {
-        var user = await _userRepository.GetAsync(request.UserName);
+        var user = await _userRepository.GetAsync(request.UserName.ToLower());
         if (user == null)
         {
             return BadRequest("User not found.");
@@ -64,6 +75,16 @@ public class AuthController : ControllerBase
         if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
         {
             return BadRequest("Wrong password.");
+        }
+
+        if (!user.IsApproved)
+        {
+            return BadRequest("Approval waiting.");
+        }
+
+        if (!user.IsEnable)
+        {
+            return BadRequest("User disabled.");
         }
 
         string token = CreateToken(user);

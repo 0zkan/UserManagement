@@ -16,6 +16,11 @@ public class UserActivationConsumer : IConsumer<UserActivation>
     {
         var message = context.Message;
 
-        //await _userRepository.GetAsync());
+        var user = await _userRepository.GetAsync(message.id);
+        if (user != null)
+        {
+            user.IsEnable = message.isEnabled;
+            await _userRepository.UpdateAsync(user.Id, user);
+        }
     }
 }

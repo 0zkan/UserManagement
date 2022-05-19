@@ -12,8 +12,16 @@ public class UserApprovementConsumer : IConsumer<UserApprovement>
     {
         _userRepository = userRepository;
     }
-    public Task Consume(ConsumeContext<UserApprovement> context)
+    public async Task Consume(ConsumeContext<UserApprovement> context)
     {
-        throw new NotImplementedException();
+        var message = context.Message;
+
+        var user = await _userRepository.GetAsync(message.id);
+        if (user != null && message.isApproved)
+        {
+            user.IsEnable = true;
+            user.IsApproved = true;
+            await _userRepository.UpdateAsync(user.Id, user);
+        }
     }
 }

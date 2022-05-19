@@ -8,7 +8,6 @@ service Manager {
   rpc GetUserList  (UserListRequest) returns (UserListResponse);
   rpc UserApprovement  (UserApproveRequest) returns (UserApproveResponse);
   rpc UserActivation  (UserActivationRequest) returns (UserActivationResponse);
-  rpc SayHello (HelloRequest) returns (HelloReply);
 }
 
 message UserListRequest {
@@ -21,7 +20,7 @@ message UserListResponse {
 }
 
 message UserModel {
-  int32 id = 1;
+  string id = 1;
   string name = 2;
   bool isapprovement = 3;
   bool isenabled = 4;
@@ -47,12 +46,4 @@ message UserActivationResponse {
   bool issuccess = 1;
   string message = 2;
   string errormessage =3;
-}
-
-message HelloRequest {
-  string name = 1;
-}
-// The response message containing the greetings.
-message HelloReply {
-  string message = 1;
 }

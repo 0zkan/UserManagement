@@ -18,6 +18,9 @@ public class MongoRepository<T> : IRepository<T> where T : IEntity
     public async Task<T?> GetAsync(string name) =>
         await dbCollection.Find(x => x.Name == name).FirstOrDefaultAsync();
 
+    public async Task<T?> GetAsync(Guid id) =>
+        await dbCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+
     public async Task CreateAsync(T newEntity) =>
         await dbCollection.InsertOneAsync(newEntity);
 
