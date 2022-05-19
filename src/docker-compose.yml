@@ -25,7 +25,7 @@ services:
     image: mongo
     container_name: managementMongo
     ports:
-      - 27018:27018
+      - 27018:27017
     volumes:
       - mongodbdata2:/data/db
 

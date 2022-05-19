@@ -5,7 +5,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using UserManagement.Framework.Repositories;
-using UserManagement.Services.UserPortal.API.Contracts;
+using UserManagement.Services.Framework.API.Contracts;
 using UserManagement.Services.UserPortal.API.Entities;
 using UserManagement.Services.UserPortal.API.Models;
 
@@ -77,7 +77,7 @@ public class AuthController : ControllerBase
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Role, "User")
             };
-        //TODO : key secret store a konulacak
+        //TODO : token should be in key secret store
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
             _configuration.GetSection("AppSettings:Token").Value
         ));

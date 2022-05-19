@@ -1,7 +1,7 @@
 using Grpc.Core;
 using MassTransit;
 using UserManagement.Framework.Repositories;
-using UserManagement.Services.Management.API.Contracts;
+using UserManagement.Services.Framework.API.Contracts;
 using UserManagement.Services.Management.API.Entities;
 
 namespace Management.API.Services;
