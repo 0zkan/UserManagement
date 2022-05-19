@@ -1,7 +1,5 @@
-namespace UserManagement.Services.UserPortal.API.Models
+namespace UserManagement.Services.UserPortal.API.Models;
+public class UserProfileDto
 {
-    public class UserProfileDto
-    {
-        public string Description { get; set; } = string.Empty;
-    }
+    public string Description { get; set; } = string.Empty;
 }

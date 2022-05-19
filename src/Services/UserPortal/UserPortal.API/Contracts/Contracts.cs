@@ -1,4 +1,2 @@
-namespace UserManagement.Services.UserPortal.API.Contracts
-{
-    public record UserCreated(Guid id, string name);
-}
+namespace UserManagement.Services.UserPortal.API.Contracts;
+public record UserRegister(Guid id, string name);

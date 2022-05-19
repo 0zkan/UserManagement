@@ -1,8 +1,5 @@
-namespace UserManagement.Framework.Settings
+namespace UserManagement.Framework.Settings;
+public class RabbitMQSettings
 {
-    public class RabbitMQSettings
-    {
-        public string Host { get; init; }
-    }
-
+    public string Host { get; init; }
 }

@@ -9,111 +9,110 @@ using UserManagement.Services.UserPortal.API.Contracts;
 using UserManagement.Services.UserPortal.API.Entities;
 using UserManagement.Services.UserPortal.API.Models;
 
-namespace UserManagement.Services.UserPortal.API.Controllers
+namespace UserManagement.Services.UserPortal.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class AuthController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    private readonly IConfiguration _configuration;
+    private readonly IRepository<User> _userRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
+    public IUserService _userService { get; }
+
+    public AuthController(IConfiguration configuration, IRepository<User> userRepository, IUserService userService, IPublishEndpoint publishEndpoint)
     {
-        private readonly IConfiguration _configuration;
-        private readonly IRepository<User> _userRepository;
-        private readonly IPublishEndpoint _publishEndpoint;
-        public IUserService _userService { get; }
+        _configuration = configuration;
+        _userRepository = userRepository;
+        _userService = userService;
+        _publishEndpoint = publishEndpoint;
+    }
 
-        public AuthController(IConfiguration configuration, IRepository<User> userRepository, IUserService userService, IPublishEndpoint publishEndpoint)
+    [HttpPost("register")]
+    public async Task<ActionResult<User>> Register(UserDto request)
+    {
+        try
         {
-            _configuration = configuration;
-            _userRepository = userRepository;
-            _userService = userService;
-            _publishEndpoint = publishEndpoint;
+            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            User user = new User();
+            user.Id = Guid.NewGuid();
+            user.Name = request.UserName;
+            user.PasswordHash = Convert.ToBase64String(passwordHash, 0, passwordHash.Length);
+            user.PasswordSalt = Convert.ToBase64String(passwordSalt, 0, passwordSalt.Length);
+            await _userRepository.CreateAsync(user);
+
+            await _publishEndpoint.Publish(new UserRegister(user.Id, user.Name));
+
+            return Ok("User Registered");
+        }
+        catch (System.Exception)
+        {
+            return Ok("An error occurred while processing your transaction.");
+        }
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<string>> Login(UserDto request)
+    {
+        var user = await _userRepository.GetAsync(request.UserName);
+        if (user == null)
+        {
+            return BadRequest("User not found.");
         }
 
-        [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto request)
+        if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
         {
-            try
-            {
-                CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-                User user = new User();
-                user.Id = Guid.NewGuid();
-                user.Name = request.UserName;
-                user.PasswordHash = Convert.ToBase64String(passwordHash, 0, passwordHash.Length);
-                user.PasswordSalt = Convert.ToBase64String(passwordSalt, 0, passwordSalt.Length);
-                await _userRepository.CreateAsync(user);
-
-                await _publishEndpoint.Publish(new UserCreated(user.Id, user.Name));
-
-                return Ok("User Created");
-            }
-            catch (System.Exception)
-            {
-                return Ok("An error occurred while processing your transaction.");
-            }
+            return BadRequest("Wrong password.");
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
-        {
-            var user = await _userRepository.GetAsync(request.UserName);
-            if (user == null)
-            {
-                return BadRequest("User not found.");
-            }
+        string token = CreateToken(user);
 
-            if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
-            {
-                return BadRequest("Wrong password.");
-            }
-
-            string token = CreateToken(user);
-
-            return Ok(token);
-        }
-        private string CreateToken(User user)
-        {
-            List<Claim> claims = new List<Claim>
+        return Ok(token);
+    }
+    private string CreateToken(User user)
+    {
+        List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Role, "User")
             };
-            //TODO : key secret store a konulacak
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value
-            ));
+        //TODO : key secret store a konulacak
+        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+            _configuration.GetSection("AppSettings:Token").Value
+        ));
 
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: cred
-            );
+        var token = new JwtSecurityToken(
+            claims: claims,
+            expires: DateTime.Now.AddDays(1),
+            signingCredentials: cred
+        );
 
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return jwt;
-        }
+        return jwt;
+    }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+    private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+    {
+        using (var hmac = new HMACSHA512())
         {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
+    }
 
-        private bool VerifyPasswordHash(string password, string hash, string salt)
+    private bool VerifyPasswordHash(string password, string hash, string salt)
+    {
+        byte[] passwordHash = Convert.FromBase64String(hash);
+        byte[] passwordSalt = Convert.FromBase64String(salt);
+
+        using (var hmac = new HMACSHA512(passwordSalt))
         {
-            byte[] passwordHash = Convert.FromBase64String(hash);
-            byte[] passwordSalt = Convert.FromBase64String(salt);
-
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(passwordHash);
-            }
+            var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return computedHash.SequenceEqual(passwordHash);
         }
     }
 }

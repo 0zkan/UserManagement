@@ -1,9 +1,7 @@
-namespace UserManagement.Framework.Entities
+namespace UserManagement.Framework.Entities;
+public interface IEntity
 {
-    public interface IEntity
-    {
-        Guid Id { get; set; }
+    Guid Id { get; set; }
 
-        string? Name { get; set; }
-    }
+    string Name { get; set; }
 }

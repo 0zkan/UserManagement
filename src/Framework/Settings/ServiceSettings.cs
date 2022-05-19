@@ -1,8 +1,5 @@
-namespace UserManagement.Framework.Settings
+namespace UserManagement.Framework.Settings;
+public class ServiceSettings
 {
-    public class ServiceSettings
-    {
-        public string ServiceName { get; init; } = string.Empty;
-    }
-
+    public string ServiceName { get; init; } = string.Empty;
 }

@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option csharp_namespace = "Management.API";
+
+package manager;
+
+service Manager {
+  rpc GetUserList  (UserListRequest) returns (UserListResponse);
+  rpc UserApprovement  (UserApproveRequest) returns (UserApproveResponse);
+  rpc UserActivation  (UserActivationRequest) returns (UserActivationResponse);
+  rpc SayHello (HelloRequest) returns (HelloReply);
+}
+
+message UserListRequest {
+
+}
+
+
+message UserListResponse {
+	repeated UserModel data = 1;
+}
+
+message UserModel {
+  int32 id = 1;
+  string name = 2;
+  bool isapprovement = 3;
+  bool isenabled = 4;
+}
+
+message UserApproveRequest {
+	string id = 1;
+  bool isapproved = 2;
+}
+
+message UserApproveResponse {
+	bool issuccess = 1;
+  string message = 2;
+  string errormessage =3;
+}
+
+message UserActivationRequest {
+  string id = 1;
+  bool isneabled = 2;
+}
+
+message UserActivationResponse {
+  bool issuccess = 1;
+  string message = 2;
+  string errormessage =3;
+}
+
+message HelloRequest {
+  string name = 1;
+}
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
