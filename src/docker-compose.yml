@@ -1,8 +1,16 @@
-#docker run -d --rm --name mongo -p 27017:27017 -v mongodb:/data/db mongo
-#external_port:internal_port
-version: '3.8'
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
 
 services:
+  userportalapi:
+    image: userportalapi
+    build:
+      context: .
+      dockerfile: Services/UserPortal/UserPortal.API/Dockerfile
+    ports:
+      - 5224:80
+
   userPortalMongo:
     image: mongo
     container_name: userPortalMongo
