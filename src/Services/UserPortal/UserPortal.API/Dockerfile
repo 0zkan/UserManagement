@@ -7,27 +7,22 @@ WORKDIR /src
 
 COPY "UserManagement.sln" "UserManagement.sln"
 
-COPY ["Services/UserPortal/UserPortal.API/UserPortal.API.csproj", "Services/UserPortal/UserPortal.API/"]
-COPY ["Services/Management/Management.API/Management.API.csproj", "Services/Management/Management.API/"]
-COPY ["Framework/Framework.csproj", "Framework/Framework.csproj"]
+COPY "Services/UserPortal/UserPortal.API/UserPortal.API.csproj" "Services/UserPortal/UserPortal.API/"
+COPY "Services/Management/Management.API/Management.API.csproj" "Services/Management/Management.API/"
+COPY "Framework/Framework.csproj" "Framework/Framework.csproj"
 
 COPY "NuGet.config" "NuGet.config"
 
-RUN dotnet pack Framework/Framework.csproj -o ./packages /p:Version=1.0.3
-RUN dotnet restore "UserManagement.sln"
+RUN mkdir -p packages
+RUN dotnet pack Framework/Framework.csproj -o packages /p:Version=1.0.3
+RUN dotnet restore "UserManagement.sln" --configfile NuGet.config
 
 COPY . .
-
-#WORKDIR /src
-#RUN dotnet pack Framework/Framework.csproj -o ./packages /p:Version=1.0.3
-#RUN dotnet nuget add source ./packages -n FW
-#RUN dotnet restore "UserManagement.sln"
-
 WORKDIR /src/Services/UserPortal/UserPortal.API
+RUN dotnet restore "UserPortal.API.csproj" --configfile ../../../NuGet.config
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish "UserPortal.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
