@@ -1,41 +1,67 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
 
-version: '3.4'
+version: '3.8'
 
 services:
-  userportalapi:
-    image: userportalapi
+  userportal-api:
+    image: ${DOCKER_REGISTRY-}userportal-image
+    container_name: userportal-api
     build:
       context: .
       dockerfile: Services/UserPortal/UserPortal.API/Dockerfile
     ports:
       - 5224:80
-
-  userPortalMongo:
+    depends_on:
+      - userportal-mongodb
+      - rabbitmq
+      
+  userportal-mongodb:
     image: mongo
-    container_name: userPortalMongo
+    container_name: userportal-mongodb
+    expose:
+      - 27017
     ports:
       - 27017:27017
     volumes:
       - mongodbdata:/data/db
-  
+    hostname: mongohost
+
+  management-api:
+    image: ${DOCKER_REGISTRY-}management-image
+    container_name: management-api
+    build:
+      context: .
+      dockerfile: Services/Management/Management.API/Dockerfile
+    ports:
+      - 5225:80
+    depends_on:
+      - management-mongodb
+      - rabbitmq
+
+  management-mongodb:
+    image: mongo
+    command: mongod --port 27018
+    container_name: management-mongodb
+    expose:
+      - 27018
+    ports:
+      - 27018:27018
+    volumes:
+      - mongodbdata2:/data/db
+    hostname: mongohost2
+
   rabbitmq:
-    image: rabbitmq:management
+    image: rabbitmq:3-management-alpine
     container_name: rabbitmq
+    expose:
+      - 5672
+      - 15672
     ports:
       - 5672:5672
       - 15672:15672
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
     hostname: rabbitmq
-
-  managementMongo:
-    image: mongo
-    container_name: managementMongo
-    ports:
-      - 27018:27017
-    volumes:
-      - mongodbdata2:/data/db
 
 volumes:
   mongodbdata:

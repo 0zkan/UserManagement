@@ -40,6 +40,67 @@
                 "${workspaceFolder}/UserPortal/src/UserPortal.Service/UserPortal.Service.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "usermanagement:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/src/Services/UserPortal/UserPortal.API/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Services/UserPortal/UserPortal.API/UserPortal.API.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "usermanagement:latest",
+                "dockerfile": "${workspaceFolder}/src/Services/UserPortal/UserPortal.API/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Services/UserPortal/UserPortal.API/UserPortal.API.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {
+                "os": "Windows"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Services/UserPortal/UserPortal.API/UserPortal.API.csproj",
+                "enableDebugging": true,
+                "configureSsl": false
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {
+                "os": "Windows"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Services/UserPortal/UserPortal.API/UserPortal.API.csproj"
+            }
         }
     ]
 }

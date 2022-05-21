@@ -10,8 +10,8 @@
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
-**/bin/
-**/obj/
+**/bin
+**/obj
 **/charts
 **/docker-compose*
 **/compose*
