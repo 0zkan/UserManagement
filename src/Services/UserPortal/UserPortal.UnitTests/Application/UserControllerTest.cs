@@ -14,7 +14,7 @@ public class UserControllerTest
     }
 
     [Fact]
-    public async Task GetProfile_WithVerifiedUser_ReturnOk()
+    public async Task GetProfile_WithVerifiedUser_ReturnOkWithProfile()
     {
         //Arrange 
         _httpContextAccessor.Setup(x => x.HttpContext.User.FindFirst(It.IsAny<string>()))
