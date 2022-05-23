@@ -1,0 +1,12 @@
+global using Xunit;
+global using Moq;
+global using UserManagement.Services.UserPortal.API.Entities;
+global using UserManagement.Services.UserPortal.API.Controllers;
+global using UserManagement.Services.UserPortal.API.Models;
+global using Microsoft.Extensions.Configuration;
+global using MassTransit;
+global using UserManagement.Framework.Repositories;
+global using UserManagement.Services.UserPortal.API.Services;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Http;
+global using FluentAssertions;

@@ -1,0 +1,4 @@
+{
+    "FSharp.suggestGitignore": false,
+    "dotnet-test-explorer.testProjectPath": "**/*Tests.csproj"
+}
