@@ -14,9 +14,13 @@ You will need the following tools:
 <p align="left">
  - At the root directory which include docker-compose.yml files, run below command:
 </p>
-```csharp
+
+```
+
 docker-compose build
+
 docker-compose up -d
+
 ```
 
 Project Architecture
