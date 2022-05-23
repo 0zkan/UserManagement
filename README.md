@@ -1,7 +1,7 @@
 # UserManagement
 
 
-<h1 align="center"><u>Run The Project</u></h1>
+<h1 align="left"><u>Run The Project</u></h1>
 
 You will need the following tools:
 
@@ -20,11 +20,17 @@ You will need the following tools:
 </p>
 
 ```
-
 docker-compose build
 
 docker-compose up -d
+```
+<p align="left">
+ 4- You can access to services with below links :
+</p>
 
+```
+http://localhost:5225 -> Management API
+http://localhost:5224 -> UserPortal API
 ```
 
 Project Architecture
