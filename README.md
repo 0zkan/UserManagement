@@ -1,6 +1,7 @@
 # UserManagement
 
-Run The Project
+
+<h1 align="center"><u>Run The Project</u></h1>
 
 You will need the following tools:
 
@@ -9,10 +10,13 @@ You will need the following tools:
  * Docker Desktop
  
 <p align="left">
- - Clone the repository
+ 1 -  Clone the repository
 </p>
 <p align="left">
- - At the root directory which include docker-compose.yml files, run below command:
+ 2- Docker/Docker Desktop should be running.
+</p>
+<p align="left">
+ 3- At the root directory which include docker-compose.yml files, run below command:
 </p>
 
 ```
