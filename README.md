@@ -36,3 +36,8 @@ http://localhost:5224 -> UserPortal API
 Project Architecture
 
 ![alt text](https://github.com/0zkan/UserManagement/blob/main/image/architect.png)
+
+
+Next Features:
+ * API Gateway
+ * Identity API
